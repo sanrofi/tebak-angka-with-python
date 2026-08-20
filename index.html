@@ -1,40 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Game Tebak Angka Python</title>
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Batu Gunting Kertas Python</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        input, button { padding: 10px; font-size: 16px; margin: 5px; }
-        #hasil { font-weight: bold; color: blue; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f2f5; padding: 40px 10px; }
+        .container { background: white; max-width: 420px; margin: auto; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: #1c1e21; font-size: 24px; margin-bottom: 20px; }
+        .btn-group { display: flex; justify-content: space-around; margin: 20px 0; }
+        button { font-size: 16px; padding: 12px 18px; border: none; border-radius: 10px; background: #007bff; color: white; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #0056b3; transform: translateY(-2px); }
+        #result { font-size: 18px; font-weight: bold; margin-top: 20px; color: #333; min-height: 50px; }
+        #score { font-size: 15px; margin-top: 15px; color: #65676b; background: #e4e6eb; padding: 8px; border-radius: 8px; }
     </style>
 </head>
 <body>
-    <h1>Game Tebak Angka</h1>
-    <p>Saya telah menyimpan angka dari 1 sampai 10. Coba tebak!</p>
-    <input type="number" id="tebakan" min="1" max="10">
-    <button id="tombol-tebak" py-click="cek_tebakan">Tebak!</button>
-    <p id="hasil"></p>
+    <div class="container">
+        <h1>🪨 ✂️ 📄<br>Batu Gunting Kertas</h1>
+        <p>Pilih salah satu untuk bertanding:</p>
+        
+        <div class="btn-group">
+            <button py-click="play('Batu')">🪨 Batu</button>
+            <button py-click="play('Gunting')">✂️ Gunting</button>
+            <button py-click="play('Kertas')">📄 Kertas</button>
+        </div>
 
-    <!-- Di sinilah kode Python Anda berjalan -->
-    <py-script>
+        <div id="result">Klik tombol di atas untuk memulai!</div>
+        <div id="score">Skor — Kamu: 0 | Bot: 0</div>
+    </div>
+
+    <script type="py">
         import random
         from pyscript import document
 
-        angka_rahasia = random.randint(1, 10)
+        user_score = 0
+        bot_score = 0
 
-        def cek_tebakan(event):
-            input_elemen = document.querySelector("#tebakan")
-            hasil_elemen = document.querySelector("#hasil")
-            tebakan = int(input_elemen.value)
+        def play(user_choice):
+            global user_score, bot_score
+            options = ['Batu', 'Gunting', 'Kertas']
+            bot_choice = random.choice(options)
 
-            if tebakan == angka_rahasia:
-                hasil_elemen.innerText = "Benar! Anda menang!"
-            elif tebakan < angka_rahasia:
-                hasil_elemen.innerText = "Terlalu kecil, coba lagi!"
+            if user_choice == bot_choice:
+                msg = f"Seri! Komputer juga memilih {bot_choice}."
+            elif (user_choice == 'Batu' and bot_choice == 'Gunting') or \
+                 (user_choice == 'Gunting' and bot_choice == 'Kertas') or \
+                 (user_choice == 'Kertas' and bot_choice == 'Batu'):
+                user_score += 1
+                msg = f"Kamu Menang! 🎉 {user_choice} mengalahkan {bot_choice}."
             else:
-                hasil_elemen.innerText = "Terlalu besar, coba lagi!"
-    </py-script>
+                bot_score += 1
+                msg = f"Kamu Kalah! ❌ {bot_choice} mengalahkan {user_choice}."
+
+            document.querySelector("#result").innerText = msg
+            document.querySelector("#score").innerText = f"Skor — Kamu: {user_score} | Bot: {bot_score}"
+    </script>
 </body>
 </html>
