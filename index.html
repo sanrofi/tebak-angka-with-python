@@ -19,13 +19,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>🪨 ✂️ 📄<br>Batu Gunting Kertas</h1>
+        <h1>✊ ✂️ ✋<br>Batu Gunting Kertas</h1>
         <p>Pilih salah satu untuk bertanding:</p>
         
         <div class="btn-group">
-            <button py-click="play('Batu')">🪨 Batu</button>
-            <button py-click="play('Gunting')">✂️ Gunting</button>
-            <button py-click="play('Kertas')">📄 Kertas</button>
+            <button id="btn-batu">✊ Batu</button>
+            <button id="btn-gunting">✂️ Gunting</button>
+            <button id="btn-kertas">✋ Kertas</button>
         </div>
 
         <div id="result">Klik tombol di atas untuk memulai!</div>
@@ -34,12 +34,12 @@
 
     <script type="py">
         import random
-        from pyscript import document
+        from pyscript import document, when
 
         user_score = 0
         bot_score = 0
 
-        def play(user_choice):
+        def process_play(user_choice):
             global user_score, bot_score
             options = ['Batu', 'Gunting', 'Kertas']
             bot_choice = random.choice(options)
@@ -57,6 +57,18 @@
 
             document.querySelector("#result").innerText = msg
             document.querySelector("#score").innerText = f"Skor — Kamu: {user_score} | Bot: {bot_score}"
+
+        @when("click", "#btn-batu")
+        def play_batu(event):
+            process_play("Batu")
+
+        @when("click", "#btn-gunting")
+        def play_gunting(event):
+            process_play("Gunting")
+
+        @when("click", "#btn-kertas")
+        def play_kertas(event):
+            process_play("Kertas")
     </script>
 </body>
 </html>
